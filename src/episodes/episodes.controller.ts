@@ -1,8 +1,9 @@
-import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { EpisodesService } from './episodes.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { ConfigService } from '../config/config.service';
 import { IsPositivePipe } from 'src/is-positive/is-positive.pipe';
+import { ApiKeyGuard } from 'src/api-key/api-key.guard';
 
 @Controller('episodes')
 export class EpisodesController {
@@ -35,6 +36,7 @@ export class EpisodesController {
     return episode
   }
 
+  @UseGuards(ApiKeyGuard)
   @Post()
   create(@Body(ValidationPipe) input: CreateEpisodeDto) {
     console.log({ input })
